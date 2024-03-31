@@ -98,16 +98,44 @@ sin_repetidos([H|T], [H|S]) :-
     sin_repetidos(T,S).
 
 
-sumaLista([], 0).
-sumaLista([N|L], Z) :- 
-    sumaLista(L, P),
-    suma(P, N, Z).
+% Ejercicio 4b
+conjunto([]).
+conjunto([X|L]) :-
+    not(member(X,L)),
+    conjunto(L).
+
+subconjunto(_, []).
+subconjunto(C, [X|L]) :-
+    member(X,C),
+    subconjunto(C, L).
+
+conj_iguales([], []).
+conj_iguales(C1, C2) :-
+    subconjunto(C1, C2),
+    subconjunto(C2, C1),
+    conjunto(C1),
+    conjunto(C2).
+
+interseccion([], _, []).
+interseccion([X|T], C2, [X|S]) :-
+    member(X, C2),
+    interseccion(T, C2, S).
+interseccion([_|T1], L2, S) :- interseccion(T1, L2, S).
 
 
-sumaLista2([],0).
-sumaLista2([s(N)|L], s(Sum)) :- sumaLista2([N|L], s(Sum)).
-sumaLista2([0|Ns], Sum) :- sumaLista2(Ns, Sum).
+union([], X, X).
+union([H|T], C2, U) :-
+    member(H, C2), !,
+    union(T, C2, U).
+union([H|T], C2, [H|U]) :- union(T, C2, U). 
 
+
+% Ejercicio 5
+sumaLista([],0).
+sumaLista([0|T], Sum) :- sumaLista(T, Sum).
+sumaLista([s(H)|T], s(Sum)) :- sumaLista([H|T], Sum).
+
+% Ejercicio 6
 progenitor(juan, jose).
 progenitor(jose, pedro).
 progenitor(pedro, maria).
