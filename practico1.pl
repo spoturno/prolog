@@ -140,3 +140,24 @@ progenitor(juan, jose).
 progenitor(jose, pedro).
 progenitor(pedro, maria).
 
+ancestro(X, X, [X]).
+ancestro(X, Y, [X|L]) :- 
+    progenitor(X, Z),
+    ancestro(Z, Y, L).
+
+
+% Ejercicio 8
+
+sigma(S) :- conjunto(S). 
+
+exp_reg(S, R) :-
+    sigma(S),
+    es_exp_regular(S, R).
+
+es_exp_regular(_, 0).
+es_exp_regular(_, e).
+es_exp_regular(S, [X]) :- member(X, S).
+es_exp_regular(S, (R1|R2)) :- es_exp_regular(S,R1), es_exp_regular(S,R2). % unión
+es_exp_regular(S, (R1-R2)) :- es_exp_regular(S, R1), es_exp_regular(S, R2). % concatencación 
+es_exp_regular(S, (R*)) :- es_exp_regular(S, R). % clausura de kleene
+    
