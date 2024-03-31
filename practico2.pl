@@ -100,3 +100,53 @@ merge([T1|L1], [T2|L2], [T1|L3]) :-
 merge([T1|L1], [T2|L2], [T2|L3]) :-
     T1 > T2,
     merge([T1|L1], L2, L3).
+
+
+% Ejercicio 4a
+% Defina los siguientes predicados en Prolog:
+% insertionsort(+L,?S) S es el resultado de ordenar la lista L utilizando el algoritmo insertion sort
+% mergesort(+L,?S) S es el resultado de ordenar la lista L utilizando el algoritmo merge sort
+% quicksort(+L,?S) S es el resultado de ordenar la lista L utilizando el algoritmo quick sort
+
+insertionsort([], []).
+insertionsort([H|T], Sorted):-
+    insertionsort(T, SortedTail),
+    insert(H, SortedTail, Sorted).
+
+insert(X, [], [X]).
+insert(X, [H|T], [X, H|T]) :- X =< H.
+insert(X, [H|T1], [H|T2]) :- X > H, insert(X, T1, T2).
+
+
+split([], [], []).
+split(L, A, B) :-
+    append(A, B, L),
+    largo_v2(A, N),
+    largo_v2(B, N).
+
+mergesort([], []).  
+mergesort([X, Y], [X, Y]) :- X =< Y.
+mergesort([X, Y], [Y, X]) :- X > Y.
+mergesort(L, S) :-
+    split(L, A, B),
+    mergesort(A, S1),
+    mergesort(B, S2),
+    merge(S1, S2, S).
+
+
+
+quicksort([],[]).
+
+quicksort([H|T], Sorted) :-
+    partition(T, H, Less, Greater),
+    quicksort(Less, SortedLess),
+    quicksort(Greater, SortedGreater),
+    append(SortedLess, [H|SortedGreater], Sorted).
+
+partition([], _, [], []).
+partition([X|Xs], Pivot, [X|Less], Greater) :-
+    X < Pivot,
+    partition(Xs, Pivot, Less, Greater).
+partition([X|Xs], Pivot, Less, [X|Greater]) :-
+    X >= Pivot,
+    partition(Xs, Pivot, Less, Greater).
