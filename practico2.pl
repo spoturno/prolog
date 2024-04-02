@@ -150,3 +150,38 @@ partition([X|Xs], Pivot, [X|Less], Greater) :-
 partition([X|Xs], Pivot, Less, [X|Greater]) :-
     X >= Pivot,
     partition(Xs, Pivot, Less, Greater).
+
+
+
+% Ejercicio 5
+% Considere la representación de vectores mediante listas de valores reales en Prolog. Implemente los siguientes predicados:
+% neg(+V, ?W) donde W es el vector opuesto a V
+% suma(+V, +W, ?T) donde T es la suma de los vectores V y W
+% dot(+V, +W, ?P) donde P es el producto punto entre V y w
+% dist(+V, +W, ?D) D es la distancia euclídea entre V y W
+
+neg([], []).
+neg([X|L], [N|L2]) :- N is -X, neg(L, L2).
+
+suma([], [], []).
+suma([X1|L1], [X2|L2], [X3|L3]) :-
+    X3 is X1 + X2,
+    suma(L1, L2, L3).
+
+dot([], [], 0).
+dot([X1|L1], [X2|L2], P) :-
+    dot(L1, L2, P3),
+    P is P3 + X1*X2.
+
+dist(V1, V2, D) :-
+    suma_dif_cuadrados(V1, V2, D2),
+    D is sqrt(D2).
+   
+% función auxiliar para dist
+suma_dif_cuadrados([], [], 0).
+suma_dif_cuadrados([X1|L1], [X2|L2], D) :-
+    suma_dif_cuadrados(L1, L2, D2),
+    D is D2 + (X2 - X1)**2.
+    
+
+    
