@@ -185,3 +185,34 @@ suma_dif_cuadrados([X1|L1], [X2|L2], D) :-
     
 
     
+% Ejercicio 6
+% Considere la representación de matrices mediante listas de listas de valores reales en Prolog.
+% Implemente los siguientes predicados:
+% columna(+M,?C,?R) C es la primera columna de M en forma de lista, R  es M sin la primera columna.
+% transpuesta(+M,?T) T es la transpuesta de la matriz T
+% simetrica(+M) M es una matriz simétrica
+% suma(+M,+N,?S) S es la suma de las matrices M y N
+% producto(+M,+N,?P) P es el producto de las matrices M y N
+
+columna([], [], []).
+columna([[H|T]|Rows], [H|Cs], [T|Rs]) :-
+    columna(Rows, Cs, Rs).
+
+transpuesta([], []).
+transpuesta(M, [C|T]) :-
+    columna(M, C, R), % Extraer primer columna y el resto de la matriz
+    transpuesta(R, T).
+
+% Una matriz es simetrica si es igual a su transpuesta.
+simetrica(M) :-
+    transpuesta(M, T),
+    M = T.
+
+suma_matrices([], [], []).
+suma_matrices([R1|Rs1], [R2|Rs2], [S|Ss]) :-
+    suma(R1, R2, S), % Sum the corresponding rows
+    suma_matrices(Rs1, Rs2, Ss).
+
+producto(M, N, P) :-
+    transpuesta(N, NT),
+    dot(M, NT, P).
