@@ -78,3 +78,45 @@ permutacion([H| Lista], Perm) :-
     select(H, Perm, P).
 
 % Se puede mejorar usando un acumulador de reinas agregadas que son seguras.
+
+
+% ==== Ejercicio 3 ====
+% Al principio hay tres peones blancos y tres negros, alineados y separados por una casilla vacía.
+% En cada jugada se realiza una de las cuatro siguientes modificaciones:
+% - Movimiento a la izquierda de un peón negro 
+% - Salto a la derecha de un peón blanco sobre uno negro
+% - Movimiento a la derecha de un peón blanco
+% - Salto a la izquierda de un peón negro sobre uno blanco
+% Defina el siguiente predicado:
+% peones(Movs) Movs es la lista de movimientos necesarios para intercambiar los peones blancos y negros.
+
+estado_inicial([blanco,blanco,blanco,espacio,negro,negro,negro]).
+estado_final([negro,negro,negro,espacio,blanco,blanco,blanco]).
+
+% Genera y verifica la secuencia de movimientos
+peones(Movs) :-
+   estado_inicial(EstadoInicial),
+   estado_final(EstadoFinal),
+   resolver(EstadoInicial, Movs, EstadoFinal).
+
+% Chequea si la secuencia de movimientos resuelve el problema
+resolver(Estado, [], Estado).
+resolver(Estado, [EstadoSiguiente|Moves], EstadoFinal) :-
+    movimiento(Estado, EstadoSiguiente),
+    resolver(EstadoSiguiente, Moves, EstadoFinal).
+
+% Predicado para mover un peón negro a la izquierda
+movimiento([espacio, negro| Resto], [negro, espacio | Resto]).
+movimiento([X, Y | Resto], [X | NewRest]) :- movimiento([Y | Resto], NewRest).
+
+% Predicado para mover un peón blanco a la derecha
+movimiento([blanco,espacio,Resto], [espacio,blanco|Resto]).
+movimiento([X, Y | Rest], [X | NewRest]) :- movimiento([Y | Rest], NewRest).
+
+% Predicado para saltar un peón blanco sobre un peón negro hacia la dercha
+movimiento([blanco,negro,espacio,Resto], [espacio,negro,blanco|Resto]).
+movimiento([X, Y, Z | Rest], [X | NewRest]) :- movimiento([Y, Z | Rest], NewRest).
+
+% Predicado para saltar un peón negro sobre un peón blanco hacia la izquierda
+movimiento([negro,blanco,espacio,Resto], [espacio,blanco,negro|Resto]).
+movimiento([X, Y, Z | Rest], [X | NewRest]) :- movimiento([Y, Z | Rest], NewRest).
