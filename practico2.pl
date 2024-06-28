@@ -8,13 +8,10 @@ largo([_|T], N) :-
     largo(T, N2),
     N is N2 + 1.
 
-maximo([X], X).
-maximo([X|T], X) :-
-    maximo(T, M),
-    X > M.
-maximo([X|T], M) :-
-    maximo(T,M),
-    X =< M.
+maximo([X], X) :- !.
+maximo([X|T], X) :- maximo(T, M), X > M.
+maximo([X|T], M) :- maximo(T,M), X =< M.
+
 
 % Ejercicio 2b
 % Defina los predicados de la parte b utilizando acumuladores
@@ -74,31 +71,29 @@ suma_v2([Head|Tail], S) :-
 
 pares([], []).
 pares([X|L1], [X|L2]) :-
-    X1 is X mod 2,
-    X1 =:= 0,
+    0 =:= X mod 2,
     pares(L1, L2).
 pares([X|L], P) :-
-    X1 is X mod 2,
-    X1 =\= 0,
+    0 =\= X mod 2,
     pares(L, P).
 
 
 mayores([], _, []).
 mayores([T|H1], X, [T|H2]) :- 
-    T > X,
+    T > X,!,
     mayores(H1, X, H2).
 mayores([T|H], X, M) :-
-    T =< X,
+    T =< X,!,
     mayores(H, X, M).
 
 
-merge([], L, L).
-merge(L, [], L).
+merge([], L, L):- !.
+merge(L, [], L):- !.
 merge([T1|L1], [T2|L2], [T1|L3]) :-
-    T1 =< T2,
+    T1 =< T2, !,
     merge(L1, [T2|L2], L3).
 merge([T1|L1], [T2|L2], [T2|L3]) :-
-    T1 > T2,
+    T1 > T2, !,
     merge([T1|L1], L2, L3).
 
 

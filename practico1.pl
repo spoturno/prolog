@@ -118,7 +118,7 @@ conj_iguales(C1, C2) :-
 
 interseccion([], _, []).
 interseccion([X|T], C2, [X|S]) :-
-    member(X, C2),
+    member(X, C2), !,
     interseccion(T, C2, S).
 interseccion([_|T1], L2, S) :- interseccion(T1, L2, S).
 
@@ -146,18 +146,18 @@ ancestro(X, Y, [X|L]) :-
     ancestro(Z, Y, L).
 
 
-% Ejercicio 8
-
-sigma(S) :- conjunto(S). 
-
-exp_reg(S, R) :-
-    sigma(S),
-    es_exp_regular(S, R).
-
-es_exp_regular(_, 0).
-es_exp_regular(_, e).
-es_exp_regular(S, [X]) :- member(X, S).
-es_exp_regular(S, (R1|R2)) :- es_exp_regular(S,R1), es_exp_regular(S,R2). % unión
-es_exp_regular(S, (R1-R2)) :- es_exp_regular(S, R1), es_exp_regular(S, R2). % concatencación 
-es_exp_regular(S, (R*)) :- es_exp_regular(S, R). % clausura de kleene
-    
+% % Ejercicio 8
+%
+% sigma(S) :- conjunto(S). 
+%
+% exp_reg(S, R) :-
+%     sigma(S),
+%     es_exp_regular(S, R).
+%
+% es_exp_regular(_, 0).
+% es_exp_regular(_, e).
+% es_exp_regular(S, [X]) :- member(X, S).
+% es_exp_regular(S, (R1|R2)) :- es_exp_regular(S,R1), es_exp_regular(S,R2). % unión
+% es_exp_regular(S, (R1-R2)) :- es_exp_regular(S, R1), es_exp_regular(S, R2). % concatencación 
+% es_exp_regular(S, (R*)) :- es_exp_regular(S, R). % clausura de kleene
+%
